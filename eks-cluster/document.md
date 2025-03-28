@@ -18,6 +18,16 @@ To create an EKS cluster, we need:
 
 ---
 
+## 🧰 Prerequisites
+
+| Tool        | Requirement                   |
+|-------------|-------------------------------|
+| ✅ Terraform | [Install Terraform](https://developer.hashicorp.com/terraform/downloads) |
+| ✅ AWS CLI   | [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) |
+| ✅ AWS Credentials | Run `aws configure` to set access key, secret, and default region |
+| ✅ kubectl   | [Install kubectl](https://kubernetes.io/docs/tasks/tools/) to interact with your EKS cluster |
+
+
 ## 🔍 Terraform Code Explained
 
 ### 🟡 1. Define Supported Subnets for Control Plane
@@ -133,3 +143,42 @@ resource "aws_eks_node_group" "node_group" {
 }
 ```
 ✅ Creates a managed node group that automatically handles the provisioning and lifecycle of EC2 instances. The scaling configuration defines the desired number of worker nodes (1 in this case), and the node group is tied to the EKS cluster using the `cluster_name`. This allows Kubernetes workloads (pods) to run on these nodes.
+-----
+
+## 🚀 How to Deploy
+
+### 🟢 Step 1: Initialize Terraform
+```bash
+terraform init
+```
+
+---
+
+### 🟢 Step 2: Preview the Plan
+```bash
+terraform plan
+```
+
+---
+
+### 🟢 Step 3: Apply and Create EKS Cluster
+```bash
+terraform apply
+```
+👉 Type `yes` to confirm when prompted
+
+---
+
+### 🟢 Step 4: Update kubeconfig
+```bash
+aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
+```
+
+---
+
+### 🟢 Step 5: Verify the Cluster
+```bash
+kubectl get nodes
+```
+✅ You should see **1 EC2 node** in the output.
+
