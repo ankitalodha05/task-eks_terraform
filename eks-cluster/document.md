@@ -163,9 +163,8 @@ terraform plan
 
 ### 🟢 Step 3: Apply and Create EKS Cluster
 ```bash
-terraform apply
+terraform apply -auto-approved
 ```
-👉 Type `yes` to confirm when prompted
 
 ---
 
