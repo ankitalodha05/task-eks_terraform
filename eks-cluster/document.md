@@ -181,3 +181,6 @@ kubectl get nodes
 ```
 ✅ You should see **1 EC2 node** in the output.
 
+-![WhatsApp Image 2025-03-28 at 13 28 24_68bbe43f](https://github.com/user-attachments/assets/5ec196ed-faf4-4e12-8910-0d8392dee780)
+
+
