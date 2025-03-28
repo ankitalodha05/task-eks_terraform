@@ -6,3 +6,27 @@
 
 # Ignore other temp files (optional)
 *.log
+# Terraform state files
+*.tfstate
+*.tfstate.backup
+
+# Crash logs
+crash.log
+
+# .terraform directory
+.terraform/
+
+# Sensitive files
+*.tfvars
+*.tfvars.json
+
+# Local override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Editor-specific files
+.vscode/
+.idea/
+.DS_Store
