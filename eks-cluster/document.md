@@ -139,7 +139,7 @@ resource "aws_eks_node_group" "node_group" {
     min_size     = 1
   }
 
-  instance_types = ["t2.micro"]
+  instance_types = ["t2.medium"]
 }
 ```
 ✅ Creates a managed node group that automatically handles the provisioning and lifecycle of EC2 instances. The scaling configuration defines the desired number of worker nodes (1 in this case), and the node group is tied to the EKS cluster using the `cluster_name`. This allows Kubernetes workloads (pods) to run on these nodes.
