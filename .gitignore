@@ -1,32 +1,23 @@
-# Ignore Terraform files and folders
+# Terraform directories and state files
+
 .terraform/
-*.tfstate
-*.tfstate.backup
+\*.tfstate
+\*.tfstate.backup
 .terraform.lock.hcl
 
-# Ignore other temp files (optional)
-*.log
-# Terraform state files
-*.tfstate
-*.tfstate.backup
+# Sensitive variable files
 
-# Crash logs
-crash.log
-
-# .terraform directory
-.terraform/
-
-# Sensitive files
-*.tfvars
-*.tfvars.json
+\*.tfvars
+\*.tfvars.json
 
 # Local override files
+
 override.tf
 override.tf.json
-*_override.tf
-*_override.tf.json
+\*\_override.tf
+\*\_override.tf.json
 
-# Editor-specific files
+# IDE/editor folders
+
 .vscode/
 .idea/
-.DS_Store
