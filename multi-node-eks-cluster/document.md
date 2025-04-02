@@ -326,6 +326,13 @@ kubectl get nodes
 
 You should see **2 worker nodes** in `Ready` state.
 
+-![image](https://github.com/user-attachments/assets/1a6be6b8-9d6c-4a97-b1c6-6a77bfd47c9e)
+-![image](https://github.com/user-attachments/assets/12f91e06-6fd9-4776-9733-33a8756e3be4)
+-![image](https://github.com/user-attachments/assets/0d2a576c-fd34-4d60-be99-154e1ea0a827)
+-![image](https://github.com/user-attachments/assets/55185650-2aeb-463a-8d8a-2ad886e46322)
+
+
+
 
 ---
 
