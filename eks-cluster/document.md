@@ -1,4 +1,4 @@
-# Minimal AWS EKS Cluster Setup with Terraform
+# AWS EKS Cluster Setup with Terraform
 
 ## Objective
 
@@ -193,3 +193,11 @@ kubectl get nodes
 Expected output: one running EC2 node.
 
 ---
+
+-![image](https://github.com/user-attachments/assets/3ec64683-5528-4c0d-9a50-d632422ccecd)
+-![image](https://github.com/user-attachments/assets/b0c18425-3a39-49ab-83de-a68012c1dba5)
+-![image](https://github.com/user-attachments/assets/49062a69-ff94-4b00-8062-82f11dc96944)
+-![image](https://github.com/user-attachments/assets/9d8bdccb-8a6b-40ae-9d47-83377da02b3d)
+
+
+
