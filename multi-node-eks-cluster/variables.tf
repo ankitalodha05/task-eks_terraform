@@ -3,5 +3,5 @@ variable "region" {
 }
 
 variable "cluster_name" {
-  default = "custom-eks-cluster"
+  default = "my-cluster"
 }

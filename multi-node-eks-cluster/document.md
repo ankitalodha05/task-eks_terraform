@@ -31,11 +31,11 @@ aws configure
 
 ---
 
-## 🗁 Project Structure
+## Project Structure
 
 ```
 multi-node-eks-cluster/
-├── main.tf                  # Terraform provider & setup
+├── main.tf                  # Terraform provider
 ├── variables.tf             # Input variables
 ├── network.tf               # VPC, subnets, route tables, NAT, SG
 ├── iam.tf                   # IAM roles for EKS & nodes
@@ -46,36 +46,28 @@ multi-node-eks-cluster/
 
 ---
 
-## 🗂 main.tf
+## main.tf
 
 ```hcl
 provider "aws" {
   region = "us-east-1"
 }
 
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-}
 ```
 
 ---
 
-## 🗂 variables.tf
+## variables.tf
 
 ```hcl
 variable "cluster_name" {
-  default = "custom-eks-cluster"
+  default = "my-cluster"
 }
 ```
 
 ---
 
-## 🗂 network.tf
+## network.tf
 
 ```hcl
 resource "aws_vpc" "dev" {
@@ -179,10 +171,10 @@ resource "aws_security_group" "dev-sg" {
 
 ---
 
-## 🗂 iam.tf
+## iam.tf
 
 ```hcl
-resource "aws_iam_role" "eks_cluster_role" {
+resource "aws_iam_role" "cluster_role" {
   name = "eks-cluster-role"
 
   assume_role_policy = jsonencode({
@@ -197,12 +189,12 @@ resource "aws_iam_role" "eks_cluster_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
-  role       = aws_iam_role.eks_cluster_role.name
+resource "aws_iam_role_policy_attachment" "cluster_policy" {
+  role       = aws_iam_role.cluster_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
 }
 
-resource "aws_iam_role" "eks_node_role" {
+resource "aws_iam_role" "node_role" {
   name = "eks-node-role"
 
   assume_role_policy = jsonencode({
@@ -218,24 +210,24 @@ resource "aws_iam_role" "eks_node_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "worker_node_policy" {
-  role       = aws_iam_role.eks_node_role.name
+  role       = aws_iam_role.node_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "cni_policy" {
-  role       = aws_iam_role.eks_node_role.name
+  role       = aws_iam_role.node_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
 }
 
 resource "aws_iam_role_policy_attachment" "registry_policy" {
-  role       = aws_iam_role.eks_node_role.name
+  role       = aws_iam_role.node_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 ```
 
 ---
 
-## 🗂 eks-cluster.tf
+## eks-cluster.tf
 
 ```hcl
 locals {
@@ -245,9 +237,9 @@ locals {
   ]
 }
 
-resource "aws_eks_cluster" "eks_cluster" {
+resource "aws_eks_cluster" "cluster" {
   name     = var.cluster_name
-  role_arn = aws_iam_role.eks_cluster_role.arn
+  role_arn = aws_iam_role.cluster_role.arn
 
   vpc_config {
     subnet_ids              = local.private_subnets
@@ -256,19 +248,19 @@ resource "aws_eks_cluster" "eks_cluster" {
     endpoint_public_access  = true
   }
 
-  depends_on = [aws_iam_role_policy_attachment.eks_cluster_policy]
+  depends_on = [aws_iam_role_policy_attachment.cluster_policy]
 }
 ```
 
 ---
 
-## 🗂 node-group.tf
+## node-group.tf
 
 ```hcl
 resource "aws_eks_node_group" "node_group" {
-  cluster_name    = aws_eks_cluster.eks_cluster.name
+  cluster_name    = aws_eks_cluster.cluster.name
   node_group_name = "custom-node-group"
-  node_role_arn   = aws_iam_role.eks_node_role.arn
+  node_role_arn   = aws_iam_role.node_role.arn
   subnet_ids      = local.private_subnets
 
   scaling_config {
@@ -283,68 +275,56 @@ resource "aws_eks_node_group" "node_group" {
 
 ---
 
-## 🗂 outputs.tf
+## outputs.tf
 
 ```hcl
-output "cluster_name" {
-  value = aws_eks_cluster.eks_cluster.name
+output "cluster_endpoint" {
+  value = aws_eks_cluster.cluster.endpoint
 }
 
-output "kubeconfig_command" {
-  value = "aws eks update-kubeconfig --region us-east-1 --name ${aws_eks_cluster.eks_cluster.name}"
+output "cluster_name" {
+  value = aws_eks_cluster.cluster.name
 }
 ```
-
 ---
 
-## 🚀 Deployment Steps
+##  Deployment Steps
 
-### 🟢 1. Initialize Terraform
+### 1. Initialize Terraform
 
 ```bash
 terraform init
 ```
 
-### 🟢 2. Preview the plan
+### 2. Preview the plan
 
 ```bash
 terraform plan
 ```
 
-### 🟢 3. Apply the configuration
+### 3. Apply the configuration
 
 ```bash
 terraform apply -auto-approve
 ```
 
-> ⏱ This may take 10–15 minutes.
+>  This may take 10–15 minutes.
 
 ---
 
-### 🟢 4. Update kubeconfig
+### 4. Update kubeconfig
 
 ```bash
-aws eks --region us-east-1 update-kubeconfig --name custom-eks-cluster
+aws eks --region us-east-1 update-kubeconfig --name my-cluster
 ```
 
-### 🟢 5. Verify the nodes
+### 5. Verify the nodes
 
 ```bash
 kubectl get nodes
 ```
 
 You should see **2 worker nodes** in `Ready` state.
-
--![Screenshot 2025-03-28 181706](https://github.com/user-attachments/assets/37ba3003-0133-4209-bb5b-48cb6d3c3d24)
-
--![Screenshot 2025-03-28 181955](https://github.com/user-attachments/assets/4631b9ef-cf9f-4646-a4c4-419b92f1d00e)
-
--![Screenshot 2025-03-28 182052](https://github.com/user-attachments/assets/c244d4a5-84b8-4231-a506-ee01843c5aa6)
-
--![Screenshot 2025-03-28 182155](https://github.com/user-attachments/assets/ea5f7f80-d32d-4a01-aac4-08bebc25fed2)
-
--
-
 
 
 ---

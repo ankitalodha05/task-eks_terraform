@@ -6,9 +6,9 @@ resource "aws_vpc" "dev" {
 
 # Public subnet
 resource "aws_subnet" "dev-pub" {
-  vpc_id     = aws_vpc.dev.id
-  cidr_block = "10.0.1.0/24"
-  tags       = { Name = "public-subnet" }
+  vpc_id                  = aws_vpc.dev.id
+  cidr_block              = "10.0.1.0/24"
+  tags                    = { Name = "public-subnet" }
   map_public_ip_on_launch = true
 }
 
