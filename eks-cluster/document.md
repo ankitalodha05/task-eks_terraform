@@ -74,7 +74,7 @@ resource "aws_iam_role_policy_attachment" "cluster_policy" {
 
 ```hcl
 resource "aws_eks_cluster" "cluster" {
-  name     = "eks-cluster"
+  name     = "my-cluster"
   role_arn = aws_iam_role.cluster_role.arn
 
   vpc_config {
@@ -179,7 +179,7 @@ terraform apply -auto-approve
 ### Step 4: Configure kubectl
 
 ```bash
-aws eks --region us-east-1 update-kubeconfig --name eks-cluster
+aws eks --region us-east-1 update-kubeconfig --name my-cluster
 ```
 
 ---
