@@ -117,6 +117,8 @@ NAME            STATUS   ROLES          AGE    VERSION
 ```
 
 ---
+-![image](https://github.com/user-attachments/assets/63b03211-5b42-4dd1-ba76-ded04c2024b7)
+
 
 ## ✅ Cluster Setup Complete!
 
